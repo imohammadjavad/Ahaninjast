@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آهنِ ما</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@fontsource/kalameh@4.0.0/index.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Kalameh', sans-serif;
+        }
+        .slide-table {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .slide-table.open {
+            max-height: 500px; /* Adjust based on content */
+        }
+        .table-inner {
+            padding-top: 1rem; /* Spacing between title and table */
+        }
+        .table-wrapper {
+            -webkit-tap-highlight-color: transparent; /* Disable tap highlight on mobile */
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <!-- Navigation Bar -->
+    <nav class="bg-gray-800 text-white p-4 fixed w-full top-0 z-10">
+        <div class="container mx-auto flex justify-center">
+            <h1 class="text-2xl font-bold">آهنِ ما</h1>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="tablesContainer" class="container mx-auto mt-16 p-4">
+        <!-- Tables will be added here dynamically -->
+    </div>
+
+    <script>
+        // Function to create a table section
+        function createTableSection(title, rows) {
+            const uniqueId = 'tableSection_' + Math.random().toString(36).substr(2, 9); // Unique ID for each table
+
+            // Create the wrapper div
+            const wrapper = document.createElement('div');
+            wrapper.className = 'bg-gray-200 rounded-lg p-4 cursor-pointer mb-4 table-wrapper';
+            wrapper.onclick = function() {
+                toggleTable(uniqueId);
+            };
+
+            // Create title
+            const h2 = document.createElement('h2');
+            h2.className = 'text-xl font-semibold text-center';
+            h2.textContent = title;
+            wrapper.appendChild(h2);
+
+            // Create slide-table div
+            const tableDiv = document.createElement('div');
+            tableDiv.id = uniqueId;
+            tableDiv.className = 'slide-table';
+
+            // Create inner div for spacing
+            const tableInner = document.createElement('div');
+            tableInner.className = 'table-inner';
+
+            // Create table
+            const table = document.createElement('table');
+            table.className = 'w-full text-right border-collapse';
+
+            // Create thead
+            const thead = document.createElement('thead');
+            const trHead = document.createElement('tr');
+            trHead.className = 'bg-gray-300';
+            const headers = ['سایز (اینچ)', 'ضخامت (میلیمتر)', 'کارخانه', 'قیمت واحد (تومان)'];
+            headers.forEach(header => {
+                const th = document.createElement('th');
+                th.className = 'border p-2';
+                th.textContent = header;
+                trHead.appendChild(th);
+            });
+            thead.appendChild(trHead);
+            table.appendChild(thead);
+
+            // Create tbody
+            const tbody = document.createElement('tbody');
+            rows.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-white' : 'bg-gray-50';
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.className = 'border p-2';
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+
+            tableInner.appendChild(table);
+            tableDiv.appendChild(tableInner);
+            wrapper.appendChild(tableDiv);
+
+            // Append to container
+            document.getElementById('tablesContainer').appendChild(wrapper);
+        }
+
+        // Toggle function
+        function toggleTable(id) {
+            const tableSection = document.getElementById(id);
+            tableSection.classList.toggle('open');
+        }
+
+        // Example data for first table
+        const data1 = [
+            ['2', '2.5', 'کارخانه الف', '150,000'],
+            ['3', '3', 'کارخانه ب', '170,000'],
+            ['4', '3.5', 'کارخانه ج', '200,000'],
+            ['6', '4', 'کارخانه د', '250,000'],
+            ['8', '5', 'کارخانه ه', '300,000']
+        ];
+        createTableSection('لوله‌های درزدار', data1);
+
+        // Example data for second table
+        const data2 = [
+            ['1', '1.5', 'کارخانه و', '100,000'],
+            ['2', '2', 'کارخانه ز', '120,000'],
+            ['3', '2.5', 'کارخانه ح', '140,000'],
+            ['4', '3', 'کارخانه ط', '160,000'],
+            ['5', '3.5', 'کارخانه ی', '180,000']
+        ];
+        createTableSection('لوله‌های بدون درز', data2);
+    </script>
+</body>
+</html>
